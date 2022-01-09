@@ -1,10 +1,21 @@
 import { Request, Response } from 'express'
+import {VoucherBuilder} from '../Builder/builder'
 import Voucher from '../Model/Voucher'
 export class VouncherController {
     public static createVoucher = async (req: Request, res: Response) => {
         try {
-            const { name, code, startDate, endDate, applyFor, discount, quantity, description } = req.body
-            await Voucher.create({ name, code, startDate, endDate, applyFor, discount, quantity, description })
+            const voucher = new VoucherBuilder()
+            .name(req.body.name)
+            .code(req.body.code)
+            .startDate(req.body.startDate)
+            .endDate(req.body.endDate)
+            .applyFor(req.body.applyFor)
+            .discount(req.body.discount)
+            .quantity(req.body.quantity)
+            .description(req.body.description)
+            .create()
+            // const { name, code, startDate, endDate, applyFor, discount, quantity, description } = req.body
+            // await Voucher.create({ name, code, startDate, endDate, applyFor, discount, quantity, description })
             return res.status(200).json({
                 success: true,
                 message: "Created vouncher successfully"
@@ -12,7 +23,7 @@ export class VouncherController {
         } catch (error) {
             return res.json({
                 error
-            })
+            }) 
         }
     }
     public static getVoucher = async (req: Request, res: Response) => {

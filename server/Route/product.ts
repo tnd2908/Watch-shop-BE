@@ -6,6 +6,7 @@ export const productRouter: Router = express.Router()
 
 productRouter.get('/', productController.getProduct)
 productRouter.get('/query', productController.queryProduct)
+productRouter.get('/search', productController.search)
 productRouter.get('/:name', productController.getProductDetail)
 productRouter.get('/status/:status', productController.getProductByStatus)
 productRouter.post('/add-new',checkToken , productController.addNewProduct)

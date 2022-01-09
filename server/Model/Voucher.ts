@@ -28,6 +28,10 @@ const schema = new Schema({
         type: Number,
         required: true
     },
+    quantity:{
+        type: Number,
+        required: false
+    },
     description: {
         type: String,
         required: true

@@ -235,4 +235,23 @@ export class UserController {
             })
         }
     }
+    public static changePw = async (req: Request, res: Response) =>{
+        const {password} = req.body
+        const {id} = req.params
+        try {
+            await User.findByIdAndUpdate(id, {
+                password
+            })
+            return res.status(200).json({
+                success: true,
+                message: 'Updated product successfully'
+            })
+        } catch (error) {
+            console.log(error)
+            return res.json({
+                success: false,
+                message: 'Fail to edit'
+            })
+        }
+    }
 }

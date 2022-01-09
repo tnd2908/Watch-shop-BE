@@ -244,4 +244,22 @@ export class productController {
             })
         }
     }
+    public static search = async (req: Request, res: Response) => {
+        try {
+            const searchField = req.query.name
+            const product = await Product.find({name:{$regex: searchField, $options:'$i'}})
+            return res.status(200).json({
+                success: true,
+                message: 'Searched successfully',
+                data: product,
+            })
+        } catch (error) {
+            console.log(error)
+            return res.json({
+                err: error,
+                success: false,
+                message: 'Searched failed'
+            })
+        }
+    }
 }
