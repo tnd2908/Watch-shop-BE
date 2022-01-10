@@ -12,4 +12,9 @@ userRouter.get('/cart/:id', UserController.getCart)
 userRouter.put('/cart/:id', UserController.removeItem)
 userRouter.get('/', UserController.getUserByJWT)
 userRouter.get('/history/:id', checkUserToken, UserController.getHistory)
+<<<<<<< HEAD
 userRouter.post('/changepw',UserController.changePw)
+=======
+userRouter.put('/update/password/:id', checkUserToken, UserController.changePassword)
+userRouter.put('/update/information/:id', checkUserToken, UserController.changeInfor)
+>>>>>>> master
