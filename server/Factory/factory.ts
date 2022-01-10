@@ -1,5 +1,6 @@
 import { Customer } from "./Class/customer"
 import { Admin } from './Class/admin'
+import { Employee } from './Class/Employee'
 import { ICustomer } from "../Interface/customer"
 export class Factory {
     createUser = (data: ICustomer, type: string) =>{
@@ -9,6 +10,9 @@ export class Factory {
         }
         if(type === 'admin'){
             return new Admin(email, password, 'admin')
+        }
+        if(type === 'employee'){
+            return new Employee(email, password, 'employee')
         }
     }
 }

@@ -151,27 +151,21 @@ export class UserController {
         try {
             const data: any = await User.findById(id).select('cart -_id')
             const productArray = data.cart.map((item: any) => item.productId)
-            if (data.cart.length) {
-                const cart = await Product.find({ _id: { $in: productArray } }, 'name price quantity images saleOf')
-                const userCart = <any>[]
-                data.cart.map((item: any) => {
-                    cart.map((product: any) => {
-                        if (item.productId.toString() === product._id.toString()) {
-                            const { _id, name, price, quantity, images, saleOf } = product
-                            const newObj = { _id, name, price, quantity, images, quantityInCart: item.quantity, saleOf }
-                            userCart.push(newObj)
-                        }
-                    })
+            const cart = await Product.find({ _id: { $in: productArray } }, 'name price quantity images saleOf')
+            const userCart = <any>[]
+            data.cart.map((item: any) => {
+                cart.map((product: any) => {
+                    if (item.productId.toString() === product._id.toString()) {
+                        const { _id, name, price, quantity, images, saleOf } = product
+                        const newObj = { _id, name, price, quantity, images, quantityInCart: item.quantity, saleOf }
+                        userCart.push(newObj)
+                    }
                 })
-                return res.json({
-                    success: true,
-                    message: 'Get user shopping cart successfully',
-                    data: userCart
-                })
-            }
-            else return res.json({
-                success: false,
-                message: 'Empty cart',
+            })
+            return res.json({
+                success: true,
+                message: 'Get user shopping cart successfully',
+                data: userCart
             })
         } catch (error) {
             console.log(error)
@@ -189,7 +183,7 @@ export class UserController {
             const data: any = await User.findById(id, 'cart')
             if (data.cart.length) {
                 const cart = data.cart.filter((item: any) => {
-                    if (item.productId != productId) {
+                    if (item.productId !== productId) {
                         return item
                     }
                 })
@@ -232,6 +226,61 @@ export class UserController {
             return res.json({
                 success: false,
                 error
+            })
+        }
+    }
+    public static changePassword = async (req: Request, res: Response) =>{
+        const {id} = req.params
+        const {oldPassword, password} = req.body
+        try {
+            const user :any = await User.findById(id, 'password')
+            await bcrypt.compare(oldPassword, user.password, async (err, same) =>{
+                if(same){
+                    const newPassword = await bcrypt.hash(password, 10)
+                    await User.findByIdAndUpdate(id, {password: newPassword})
+                    return res.status(200).json({
+                        success: true,
+                        message: 'Updated your password'
+                    })
+                }
+                else if(err){
+                    return res.json({
+                        success: false,
+                        message: 'Wrong password, please try again!'
+                    })
+                }
+            })
+        } catch (error) {
+            return res.json({
+                success: false,
+                message: 'Fail to change password'
+            })
+        }
+    }
+    public static changeInfor = async (req: Request, res: Response) =>{
+        const {id} = req.params
+        const {firstName, lastName, phone, password} = req.body
+        try {
+            const user :any = await User.findById(id)
+            await bcrypt.compare(password, user.password, async (err, same) =>{
+                if(same){
+                    await User.findByIdAndUpdate(id, {firstName, lastName, phone})
+                    return res.status(200).json({
+                        success: true,
+                        message: 'Updated your information'
+                    })
+                }
+                else if(err){
+                    return res.json({
+                        success: false,
+                        message: 'Wrong password, please try again!'
+                    })
+                }
+            })
+        } catch (error) {
+            return res.json({
+                success: false,
+                message: 'Fail to update information'
             })
         }
     }

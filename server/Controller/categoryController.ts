@@ -46,4 +46,20 @@ export class categoryController{
             })
         }
     }
+    public static updateCategory = async (req: Request, res: Response) =>{
+        try {
+            const {name, gender} = req.body
+            const {id} = req.params
+            await Category.findByIdAndUpdate(id, {name, gender})
+            return res.json({
+                success: true,
+                message: 'Updated category successfully'
+            })
+        } catch (error) {
+            res.json({
+                success: false,
+                message: 'Add category failed'
+            })
+        }
+    }
 }
