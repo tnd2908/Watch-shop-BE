@@ -8,6 +8,7 @@ import {productRouter} from '../Route/product'
 import {billRouter} from '../Route/bill'
 import {vouncherRouter} from '../Route/vouncher'
 import {revenueRouter} from '../Route/revenue'
+import newsRoute from "../Route/news";
 import http from 'http'
 import fileUpload from 'express-fileupload';
 import cors from 'cors'
@@ -42,4 +43,5 @@ app.use('/bill', billRouter)
 app.use('/color', colorRoute)
 app.use('/voucher', vouncherRouter)
 app.use('/revenue', revenueRouter)
+app.use("/news", newsRoute);
 server.listen(PORT, ()=> console.log(`Server is running on ${PORT}`));
